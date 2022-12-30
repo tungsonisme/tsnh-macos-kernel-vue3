@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
 import './style.css';
-import HelloWorld from './components/MacosWindow.vue';
+import MacosWindow from './components/MacosWindow/index.vue';
 
-createApp(HelloWorld).mount('#app');
+createApp(MacosWindow).mount('#app');

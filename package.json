@@ -16,6 +16,7 @@
   },
   "scripts": {
     "dev": "vite",
+    "dev:prod": "nodemon --watch './src/*' -x \"pnpm build\" -e ts,vue",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "prepare": "husky install",
@@ -31,6 +32,7 @@
     ]
   },
   "peerDependencies": {
+    "pinia": "^2.0.28",
     "vue": "^3.2.45"
   },
   "devDependencies": {
@@ -44,6 +46,8 @@
     "eslint-plugin-vue": "^9.8.0",
     "husky": "^8.0.0",
     "lint-staged": "^13.1.0",
+    "nodemon": "^2.0.20",
+    "pinia": "^2.0.28",
     "postcss": "^8.4.20",
     "postcss-html": "^1.5.0",
     "prettier": "^2.8.0",
@@ -60,10 +64,10 @@
   },
   "description": "Kernel of Macos.",
   "dependencies": {
-    "eslint-visitor-keys": "^3.3.0",
-    "eslint-utils": "^3.0.0",
-    "prettier-linter-helpers": "^1.0.0",
     "eslint-scope": "^7.1.1",
+    "eslint-utils": "^3.0.0",
+    "eslint-visitor-keys": "^3.3.0",
+    "prettier-linter-helpers": "^1.0.0",
     "vue-eslint-parser": "^9.1.0"
   },
   "repository": {

@@ -1,3 +1,3 @@
-import MacosWindow from './MacosWindow.vue';
+import MacosWindow from './MacosWindow/index.vue';
 
 export { MacosWindow };
