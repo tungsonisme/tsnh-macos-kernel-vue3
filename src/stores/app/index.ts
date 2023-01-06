@@ -1,4 +1,4 @@
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { defineStore } from 'pinia';
 import { v4 as uuidv4 } from 'uuid';
 import {
@@ -10,12 +10,34 @@ import {
 import { ERR_APP_NOT_EXIST, ERR_APP_NOT_LAUNCHED } from '../../constants';
 
 const useAppStore = defineStore('app', () => {
+  let maxZIndex = 0;
+  let maxFullScreenId = 0;
+
   const apps = ref<App[]>([]);
   const launchedApps = ref<LaunchedApp[]>([]);
   const activeLaunchedAppInstanceId = ref<string>();
 
-  let maxZIndex = 0;
-  let maxFullScreenId = 0;
+  const activeAppInfo = computed(() => {
+    const activeLaunchedApp = launchedApps.value.find((item) =>
+      item.instances.find(
+        (instance) => instance.id === activeLaunchedAppInstanceId.value
+      )
+    );
+
+    if (!activeLaunchedApp) {
+      return {
+        app: null,
+        launchedApp: null,
+      };
+    }
+
+    return {
+      app:
+        apps.value.find((app) => app.name === activeLaunchedApp.appName) ??
+        null,
+      launchedApp: activeLaunchedApp,
+    };
+  });
 
   function getLaunchedApp(appName: string) {
     const launchedApp = launchedApps.value.find(
@@ -114,11 +136,13 @@ const useAppStore = defineStore('app', () => {
   }
 
   return {
-    // data
+    // state
     apps,
     launchedApps,
     activeLaunchedAppInstanceId,
-    // functions
+    // getters
+    activeAppInfo,
+    // actions
     installApps,
     installMenuBar,
     open,

@@ -6,6 +6,9 @@ export interface MenuBarDropdownItem {
 }
 
 export interface MenuBarItem {
-  title: string;
-  dropdownItems: MenuBarDropdownItem[][];
+  title?: string;
+  icon?: string;
+  type: 'click' | 'dropdown';
+  onClick?: () => void;
+  dropdownItems?: MenuBarDropdownItem[][];
 }

@@ -1,2 +1,2 @@
-export const ERR_APP_NOT_EXIST = 'app_not_exist';
-export const ERR_APP_NOT_LAUNCHED = 'app_not_launched';
+export const ERR_APP_NOT_EXIST = 'APP_NOT_EXIST';
+export const ERR_APP_NOT_LAUNCHED = 'APP_NOT_LAUNCH';

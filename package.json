@@ -32,7 +32,8 @@
     "preview": "vite preview",
     "prepare": "husky install",
     "eslint": "eslint '**/*.{ts,vue}'",
-    "stylelint": "stylelint '**/*.{scss,vue}'"
+    "stylelint": "stylelint '**/*.{scss,vue}'",
+    "prepublishOnly": "pnpm run build"
   },
   "lint-staged": {
     "*.{ts,tsx,vue}": [
