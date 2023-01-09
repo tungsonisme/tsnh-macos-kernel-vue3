@@ -1,14 +1,12 @@
 export interface MenuBarDropdownItem {
   title: string;
-  onClick: () => void;
   disabled?: boolean;
   children?: MenuBarDropdownItem[][];
+  onClick?: () => void;
 }
 
 export interface MenuBarItem {
-  title?: string;
+  title: string;
   icon?: string;
-  type: 'click' | 'dropdown';
-  onClick?: () => void;
-  dropdownItems?: MenuBarDropdownItem[][];
+  dropdownItems: MenuBarDropdownItem[][];
 }
