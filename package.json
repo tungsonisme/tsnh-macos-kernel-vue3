@@ -27,7 +27,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "dev:prod": "nodemon --watch './src/*' -x \"pnpm build\" -e ts,vue",
+    "dev:prod": "pnpm dev:link && nodemon --watch './src/*' -x \"pnpm build\" -e ts,vue",
+    "dev:link": "pnpm link .",
+    "dev:unlink": "pnpm unlink .",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
     "prepare": "husky install",

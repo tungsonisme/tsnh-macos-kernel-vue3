@@ -1,11 +1,18 @@
 <script setup lang="ts">
-import { computed, defineProps } from 'vue';
+import { computed, defineProps, onMounted, onUnmounted, ref } from 'vue';
 import { useAppStore } from '../../stores';
 
 const props = defineProps<{ appName: string }>();
 
+const emit = defineEmits<{
+  (e: 'positionUpdate', distance: { top: number; left: number }): void;
+}>();
+
+const isMouseDown = ref(false);
+
 const { launchedApps, close, minimize, enterFullScreen, exitFullScreen } =
   useAppStore();
+
 const appInstance = computed(
   () =>
     launchedApps.find((item) => item.appName === props.appName)?.instances[0]
@@ -16,10 +23,34 @@ const handleFullScreenIconClick = () => {
     ? exitFullScreen(props.appName)
     : enterFullScreen(props.appName);
 };
+
+const handleMouseDown = () => {
+  isMouseDown.value = true;
+};
+
+const handleMouseMove = (e: MouseEvent) => {
+  if (isMouseDown.value) {
+    emit('positionUpdate', { top: e.movementY, left: e.movementX });
+  }
+};
+
+const handleMouseUp = () => {
+  isMouseDown.value = false;
+};
+
+onMounted(() => {
+  document.addEventListener('mouseup', handleMouseUp);
+  document.addEventListener('mousemove', handleMouseMove);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('mouseup', handleMouseUp);
+  document.removeEventListener('mousemove', handleMouseMove);
+});
 </script>
 
 <template>
-  <div class="macos-window-menu-bar">
+  <div class="macos-window-menu-bar" @mousedown="handleMouseDown">
     <div class="icon-wrapper">
       <div class="icon close-icon" @click="close(props.appName)"></div>
       <div class="icon minimize-icon" @click="minimize(props.appName)"></div>

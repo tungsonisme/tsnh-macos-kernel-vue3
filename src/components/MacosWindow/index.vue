@@ -11,7 +11,7 @@ const left = ref(100);
 const width = ref(1024);
 const height = ref(768);
 
-const { launchedApps } = useAppStore();
+const { launchedApps, focus } = useAppStore();
 const appInstance = computed(
   () =>
     launchedApps.find((item) => item.appName === props.appName)?.instances[0]
@@ -33,11 +33,23 @@ const macosWindowStyle = computed(() => ({
   display: appInstance?.value?.minimized ? 'none' : 'flex',
   'z-index': appInstance.value?.layout.zIndex,
 }));
+
+const handlePositionUpdate = (distance: { top: number; left: number }) => {
+  top.value = top.value + distance.top;
+  left.value = left.value + distance.left;
+};
+
+const handleClick = () => {
+  focus(props.appName);
+};
 </script>
 
 <template>
-  <div class="macos-window" :style="macosWindowStyle">
-    <MacosWindowMenuBar :app-name="props.appName" />
+  <div class="macos-window" :style="macosWindowStyle" @click="handleClick">
+    <MacosWindowMenuBar
+      :app-name="props.appName"
+      @position-update="handlePositionUpdate"
+    />
     <MacosWindowBody>
       <slot />
     </MacosWindowBody>
