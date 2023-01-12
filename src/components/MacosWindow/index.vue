@@ -8,27 +8,25 @@ const props = defineProps<{ appName: string }>();
 
 const top = ref(100);
 const left = ref(100);
-const width = ref(1024);
-const height = ref(768);
 
 const { launchedApps, focus } = useAppStore();
+
 const appInstance = computed(
   () =>
     launchedApps.find((item) => item.appName === props.appName)?.instances[0]
 );
+
+const isFullScreen = computed(() => !!appInstance.value?.fullScreenId);
+
 const macosWindowStyle = computed(() => ({
-  ...(appInstance.value?.fullScreenId
+  ...(isFullScreen.value
     ? {
         top: 0,
         left: 0,
-        width: '100vw',
-        height: '100vh',
       }
     : {
         top: `${top.value}px`,
         left: `${left.value}px`,
-        width: `${width.value}px`,
-        height: `${height.value}px`,
       }),
   display: appInstance?.value?.minimized ? 'none' : 'flex',
   'z-index': appInstance.value?.layout.zIndex,
@@ -45,7 +43,12 @@ const handleClick = () => {
 </script>
 
 <template>
-  <div class="macos-window" :style="macosWindowStyle" @click="handleClick">
+  <div
+    class="macos-window"
+    :class="{ 'full-screen': isFullScreen }"
+    :style="macosWindowStyle"
+    @click="handleClick"
+  >
     <MacosWindowMenuBar
       :app-name="props.appName"
       @position-update="handlePositionUpdate"
@@ -62,5 +65,14 @@ const handleClick = () => {
   flex-direction: column;
   resize: both;
   overflow: auto;
+  filter: drop-shadow(0 0 20px rgba(0, 0, 0, 0.15))
+    drop-shadow(0 25px 30px rgba(0, 0, 0, 0.35));
+  width: 1024px;
+  height: 768px;
+
+  &.full-screen {
+    width: 100vw !important;
+    height: 100vh !important;
+  }
 }
 </style>

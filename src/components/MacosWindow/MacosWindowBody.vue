@@ -5,10 +5,11 @@
 </template>
 
 <style lang="scss" scoped>
+@import './styles.scss';
+
 .macos-window-body {
-  border-bottom-left-radius: 8px;
-  border-bottom-right-radius: 8px;
-  border: 1px solid lightgray;
+  border-bottom-left-radius: $border-radius;
+  border-bottom-right-radius: $border-radius;
   flex: 1;
   background-color: #242424;
   color: white;

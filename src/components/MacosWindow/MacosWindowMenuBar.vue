@@ -59,38 +59,61 @@ onUnmounted(() => {
         @click="handleFullScreenIconClick"
       ></div>
     </div>
+
+    <div class="app-name">
+      {{ props.appName }}
+    </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
+@import './styles.scss';
+
+$padding: 8px;
+$height: 28px;
+
 .macos-window-menu-bar {
-  background-color: lightgray;
-  padding: 12px;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  background: rgba(244, 245, 245, 0.95);
+  border-top-left-radius: $border-radius;
+  border-top-right-radius: $border-radius;
+  box-shadow: 0 0.5px 0 rgba(0, 0, 0, 0.15),
+    inset 0 -0.5px 0 rgba(0, 0, 0, 0.05);
+  position: relative;
+  height: $height;
 }
 
 .icon-wrapper {
   display: flex;
   align-items: center;
+  position: absolute;
+  left: $padding;
+  top: $padding;
+
+  .icon {
+    border-radius: 50%;
+    width: 12px;
+    height: 12px;
+    margin-right: 8px;
+
+    &.close-icon {
+      background-color: #ff3b30;
+    }
+
+    &.minimize-icon {
+      background-color: #fc0;
+    }
+
+    &.full-screen-icon {
+      background-color: #34c759;
+    }
+  }
 }
 
-.icon {
-  border-radius: 50%;
-  width: 16px;
-  height: 16px;
-  margin-right: 6px;
-
-  &.close-icon {
-    background-color: red;
-  }
-
-  &.minimize-icon {
-    background-color: green;
-  }
-
-  &.full-screen-icon {
-    background-color: yellow;
-  }
+.app-name {
+  text-align: center;
+  font-weight: 700;
+  font-size: 13px;
+  height: $height;
+  line-height: $height;
 }
 </style>
