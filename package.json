@@ -35,7 +35,10 @@
     "prepare": "husky install",
     "eslint": "eslint '**/*.{ts,vue}'",
     "stylelint": "stylelint '**/*.{scss,vue}'",
-    "prepublishOnly": "pnpm run build"
+    "prepublishOnly": "pnpm run build",
+    "publish:patch": "npm version patch && pnpm publish",
+    "publish:minor": "npm version minor && pnpm publish",
+    "publish:major": "npm version major && pnpm publish"
   },
   "lint-staged": {
     "*.{ts,tsx,vue}": [
