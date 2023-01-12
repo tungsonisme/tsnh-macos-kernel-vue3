@@ -7,6 +7,7 @@ export interface App {
   mainComponent: string;
   mainDropdownItems?: MenuBarDropdownItem[][];
   menuBarItems?: MenuBarItem[];
+  showInDock?: boolean;
 }
 
 export interface LaunchedAppInstance {

@@ -52,7 +52,7 @@ const useAppStore = defineStore('app', () => {
   }
 
   function installApps(newApps: App[]) {
-    apps.value = newApps;
+    apps.value = [...apps.value, ...newApps];
   }
 
   function installMenuBar(
@@ -113,7 +113,12 @@ const useAppStore = defineStore('app', () => {
     launchedApps.value.splice(appIndex, 1);
   }
 
-  function focus(appName: string) {
+  function focus(appName: string | undefined) {
+    if (appName === undefined) {
+      activeLaunchedAppInstanceId.value = undefined;
+      return;
+    }
+
     const launchedApp = getLaunchedApp(appName);
     activeLaunchedAppInstanceId.value = launchedApp?.instances[0].id;
     launchedApp.instances[0].layout.zIndex = ++maxZIndex;

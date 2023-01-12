@@ -40,6 +40,9 @@ const handlePositionUpdate = (distance: { top: number; left: number }) => {
 const handleClick = () => {
   focus(props.appName);
 };
+
+// TODO: add inactive styles
+// TODO: add real resize UX
 </script>
 
 <template>
