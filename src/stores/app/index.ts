@@ -39,6 +39,16 @@ const useAppStore = defineStore('app', () => {
     };
   });
 
+  function getApp(appName: string) {
+    const app = apps.value.find((item) => item.name === appName);
+
+    if (!app) {
+      throw new Error(ERR_APP_NOT_EXIST);
+    }
+
+    return app;
+  }
+
   function getLaunchedApp(appName: string) {
     const launchedApp = launchedApps.value.find(
       (item) => item.appName === appName
@@ -65,30 +75,20 @@ const useAppStore = defineStore('app', () => {
       menuBarItems?: MenuBarItem[];
     }
   ) {
-    const app = apps.value.find((item) => item.name === appName);
-
-    if (!app) {
-      throw new Error(ERR_APP_NOT_EXIST);
-    }
+    const app = getApp(appName);
 
     app.mainDropdownItems = mainDropdownItems;
     app.menuBarItems = menuBarItems;
   }
 
   function open(appName: string) {
-    const app = apps.value.find((item) => item.name === appName);
-
-    if (!app) {
-      throw new Error(ERR_APP_NOT_EXIST);
-    }
+    const app = getApp(appName);
 
     const launchedApp = launchedApps.value.find(
       (item) => item.appName === appName
     );
 
-    if (launchedApp) {
-      focus(appName);
-    } else {
+    if (!launchedApp) {
       launchedApps.value.push({
         appName: appName,
         instances: [
@@ -104,11 +104,13 @@ const useAppStore = defineStore('app', () => {
         ],
       });
     }
+
+    focus(appName);
   }
 
   function close(appName: string) {
     const appIndex = launchedApps.value.findIndex(
-      (item) => item.appName !== appName
+      (item) => item.appName === appName
     );
     launchedApps.value.splice(appIndex, 1);
   }
@@ -120,6 +122,7 @@ const useAppStore = defineStore('app', () => {
     }
 
     const launchedApp = getLaunchedApp(appName);
+
     activeLaunchedAppInstanceId.value = launchedApp?.instances[0].id;
     launchedApp.instances[0].layout.zIndex = ++maxZIndex;
     launchedApp.instances[0].minimized = false;
@@ -148,6 +151,8 @@ const useAppStore = defineStore('app', () => {
     // getters
     activeAppInfo,
     // actions
+    getApp,
+    getLaunchedApp,
     installApps,
     installMenuBar,
     open,

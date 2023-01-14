@@ -1,6 +1,6 @@
 <template>
   <div class="macos-window-body">
-    <slot />
+    <slot class="macos-window-body-slot" />
   </div>
 </template>
 
@@ -11,7 +11,8 @@
   border-bottom-left-radius: $border-radius;
   border-bottom-right-radius: $border-radius;
   flex: 1;
-  background-color: #242424;
+  background-color: black;
   color: white;
+  overflow: auto;
 }
 </style>

@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import { computed, defineProps, onMounted, onUnmounted, ref } from 'vue';
+import { storeToRefs } from 'pinia';
+import { computed, defineProps } from 'vue';
 import { useAppStore } from '../../stores';
+import useMove from './useMove';
 
 const props = defineProps<{ appName: string }>();
 
@@ -8,60 +10,74 @@ const emit = defineEmits<{
   (e: 'positionUpdate', distance: { top: number; left: number }): void;
 }>();
 
-const isMouseDown = ref(false);
+const store = useAppStore();
+const { activeAppInfo } = storeToRefs(store);
+const { apps, launchedApps, close, minimize, enterFullScreen, exitFullScreen } =
+  store;
 
-const { launchedApps, close, minimize, enterFullScreen, exitFullScreen } =
-  useAppStore();
-
-const appInstance = computed(
-  () =>
-    launchedApps.find((item) => item.appName === props.appName)?.instances[0]
+const appTitle = computed(
+  () => apps.find((item) => item.name === props.appName)?.title
 );
 
-const handleFullScreenIconClick = () => {
-  appInstance.value?.fullScreenId
-    ? exitFullScreen(props.appName)
-    : enterFullScreen(props.appName);
-};
+const isInactive = computed(
+  () => activeAppInfo?.value.app?.name !== props.appName
+);
 
-const handleMouseDown = () => {
-  isMouseDown.value = true;
-};
+const { handleMouseDown } = useMove(props.appName, (data) =>
+  emit('positionUpdate', data)
+);
 
-const handleMouseMove = (e: MouseEvent) => {
-  if (isMouseDown.value) {
-    emit('positionUpdate', { top: e.movementY, left: e.movementX });
+function handleFullScreenIconClick() {
+  const appInstance = launchedApps.find(
+    (item) => item.appName === props.appName
+  )?.instances[0];
+
+  if (appInstance) {
+    appInstance?.fullScreenId
+      ? exitFullScreen(props.appName)
+      : enterFullScreen(props.appName);
   }
-};
-
-const handleMouseUp = () => {
-  isMouseDown.value = false;
-};
-
-onMounted(() => {
-  document.addEventListener('mouseup', handleMouseUp);
-  document.addEventListener('mousemove', handleMouseMove);
-});
-
-onUnmounted(() => {
-  document.removeEventListener('mouseup', handleMouseUp);
-  document.removeEventListener('mousemove', handleMouseMove);
-});
+}
 </script>
 
 <template>
-  <div class="macos-window-menu-bar" @mousedown="handleMouseDown">
+  <div
+    class="macos-window-menu-bar"
+    :class="{ inactive: isInactive }"
+    @mousedown="handleMouseDown"
+  >
     <div class="icon-wrapper">
-      <div class="icon close-icon" @click="close(props.appName)"></div>
-      <div class="icon minimize-icon" @click="minimize(props.appName)"></div>
+      <div
+        class="icon close-icon"
+        @click="
+          (e) => {
+            close(props.appName);
+            e.stopPropagation();
+          }
+        "
+      ></div>
+      <div
+        class="icon minimize-icon"
+        @click="
+          (e) => {
+            minimize(props.appName);
+            e.stopPropagation();
+          }
+        "
+      ></div>
       <div
         class="icon full-screen-icon"
-        @click="handleFullScreenIconClick"
+        @click="
+          (e) => {
+            handleFullScreenIconClick();
+            e.stopPropagation();
+          }
+        "
       ></div>
     </div>
 
     <div class="app-name">
-      {{ props.appName }}
+      {{ appTitle }}
     </div>
   </div>
 </template>
@@ -90,6 +106,7 @@ $height: 28px;
   top: $padding;
 
   .icon {
+    border: 0.5px solid rgba(0, 0, 0, 0.12);
     border-radius: 50%;
     width: 12px;
     height: 12px;
@@ -115,5 +132,17 @@ $height: 28px;
   font-size: 13px;
   height: $height;
   line-height: $height;
+}
+
+.macos-window-menu-bar.inactive {
+  background: #f6f6f6 !important;
+
+  .icon {
+    background-color: #e3e3e3 !important;
+  }
+
+  .app-name {
+    color: rgba(60, 60, 67, 0.6) !important;
+  }
 }
 </style>
