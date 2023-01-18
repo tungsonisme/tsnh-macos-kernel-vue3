@@ -1,13 +1,14 @@
 import { MenuBarDropdownItem, MenuBarItem } from '.';
 
 export interface App {
+  type: 'vue' | 'react';
   // name is unique identifier
   name: string;
   // when icon is NOT null, title will be ignored
   icon: string;
   // title: app name shown to users
   title: string;
-  mainComponent: string;
+  component: string;
   defaultStyles?: {
     top?: number;
     left?: number;

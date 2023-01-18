@@ -95,7 +95,7 @@ const useAppStore = defineStore('app', () => {
           {
             id: uuidv4(),
             launchedAppName: appName,
-            component: app.mainComponent,
+            component: app.component,
             layout: {
               zIndex: ++maxZIndex,
             },
