@@ -3,10 +3,10 @@ import { MenuBarDropdownItem, MenuBarItem } from '.';
 export interface App {
   // name is unique identifier
   name: string;
-  // title: app name shown to users
-  title: string;
   // when icon is NOT null, title will be ignored
   icon: string;
+  // title: app name shown to users
+  title: string;
   mainComponent: string;
   defaultStyles?: {
     top?: number;
