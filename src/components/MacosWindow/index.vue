@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { defineProps } from 'vue';
 import { useAppStore } from '../../stores';
 import MacosWindowMenuBar from './MacosWindowMenuBar.vue';
 import MacosWindowBody from './MacosWindowBody.vue';
